@@ -15,17 +15,17 @@ class InfoMessage:
 
     def get_message(self) -> str:
         return (f'Тип тренировки: {self.training_type}; '
-                f'Длительность: {format(self.duration, ".3f")} ч.; '
-                f'Дистанция: {format(self.distance, ".3f")} км; '
-                f'Ср. скорость: {format(self.speed, ".3f")} км/ч; '
-                f'Потрачено ккал: {format(self.calories, ".3f")}.')
+                f'Длительность: {self.duration:.3f} ч.; '
+                f'Дистанция: {self.distance:.3f} км; '
+                f'Ср. скорость: {self.speed:.3f} км/ч; '
+                f'Потрачено ккал: {self.calories:.3f}.')
 
 
 class Training:
     """Базовый класс тренировки."""
-    M_IN_KM = 1000
-    LEN_STEP = 0.65
-    MIN_IN_H = 60
+    M_IN_KM: int = 1000
+    LEN_STEP: float = 0.65
+    MIN_IN_H: int = 60
 
     def __init__(self,
                  action: int,
@@ -59,9 +59,9 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
-    CALORIES_MEAN_SPEED_MULTIPLIER = 18
-    CALORIES_MEAN_SPEED_SHIFT = 1.79
-    KMH_IN_MSEC = 0.278
+    CALORIES_MEAN_SPEED_MULTIPLIER: int = 18
+    CALORIES_MEAN_SPEED_SHIFT: float = 1.79
+    KMH_IN_MSEC: float = 0.278
 
     def get_spent_calories(self) -> float:
         return ((self.CALORIES_MEAN_SPEED_MULTIPLIER
@@ -73,10 +73,10 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    CALORIES_WEIGHT_MULTIPLIER = 0.035
-    CALORIES_SPEED_HEIGHT_MULTIPLIER = 0.029
-    CM_IN_M = 100
-    KMH_IN_MSEC = 0.278
+    CALORIES_WEIGHT_MULTIPLIER: float = 0.035
+    CALORIES_SPEED_HEIGHT_MULTIPLIER: float = 0.029
+    CM_IN_M: int = 100
+    KMH_IN_MSEC: float = 0.278
 
     def __init__(self,
                  action: int,
@@ -101,9 +101,9 @@ class SportsWalking(Training):
 
 class Swimming(Training):
     """Тренировка: плавание."""
-    LEN_STEP = 1.38
-    CALORIES_SPEED_MULTIPLIER = 1.1
-    CALORIES_WEIGHT_MULTIPLIER = 2
+    LEN_STEP: float = 1.38
+    CALORIES_SPEED_MULTIPLIER: float = 1.1
+    CALORIES_WEIGHT_MULTIPLIER: int = 2
 
     def __init__(self,
                  action: int,
@@ -126,20 +126,21 @@ class Swimming(Training):
                 * self.weight * self.duration)
 
 
-def read_package(workout_abbreviation: str, data_list: list) -> Training:
+def read_package(workout_abbreviation: str, data_list: list):
     """Прочитать данные полученные от датчиков."""
     training_type = {'SWM': Swimming,
                      'RUN': Running,
                      'WLK': SportsWalking}
-    if training_type.get(workout_abbreviation) is None:
-        return Training(0, 0, 0)
-    return training_type[workout_abbreviation](*data_list)
+    try:
+        return training_type[workout_abbreviation](*data_list)
+    except KeyError:
+        return 'Неизвестный тип тренировки.'
 
 
 def main(unpacked_training: Training) -> None:
     """Главная функция."""
-    if type(unpacked_training).__name__ == 'Training':
-        print('Неизвестный вид тренировки.')
+    if type(unpacked_training) is str:
+        print(unpacked_training)
     else:
         info: InfoMessage = unpacked_training.show_training_info()
         print(info.get_message())
@@ -149,7 +150,7 @@ if __name__ == '__main__':
     packages = [
         ('SWM', [720, 1, 80, 25, 40]),
         ('RUN', [15000, 1, 75]),
-        ('WLK', [9000, 1, 75, 180]),
+        ('WL', [9000, 1, 75, 180]),
     ]
 
     for workout_type, data in packages:
