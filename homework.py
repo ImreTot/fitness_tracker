@@ -139,7 +139,7 @@ def read_package(workout_abbreviation: str, data_list: list):
 
 def main(unpacked_training: Training) -> None:
     """Главная функция."""
-    if type(unpacked_training) is str:
+    if isinstance(unpacked_training, str):
         print(unpacked_training)
     else:
         info: InfoMessage = unpacked_training.show_training_info()
