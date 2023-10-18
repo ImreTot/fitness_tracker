@@ -1,6 +1,6 @@
 # Fitness trackers
 ## Using
-A fitness tracker module built in pure Python using OPP. Depending on the type of workout and other data, the module calculates the number of calories burned and the distance traveled. It can be easily integrated into a project.
+A fitness tracker module built in pure Python3 using OPP. Depending on the type of workout and other data, the module calculates the number of calories burned and the distance traveled. It can be easily integrated into a project.
 
 To use the tracker you need to call
 ```sh
